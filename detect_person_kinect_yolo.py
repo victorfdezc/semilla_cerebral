@@ -166,7 +166,7 @@ def escalar_2_0_5_a_0_700(x):
       - x=2   → y=0
       - x=0.5 → y=700
     """
-    return (x - 2) * (700 / (0.5 - 2))
+    return np.clip((x - 4.5) * (90 / (1 - 2)),0,90)
 
 # ──────── 4. MAIN LOOP ────────
 
@@ -184,12 +184,13 @@ def main():
     ser = serial.Serial(puerto, baudrate, timeout=1)
 
     # 3. Espera un par de segundos para que el Arduino reinicie
-    time.sleep(10)
+    time.sleep(5)
 
     # 4. Envía un comando al Arduino (por ejemplo, la cadena 'LED_ON\n')
     #    Fíjate en el sufijo '\n' si tu Arduino espera salto de línea para parsear
     comando = 'R\n'
     ser.write(comando.encode('utf-8'))
+    send_distance(0)
 
 
     while True:
@@ -201,9 +202,14 @@ def main():
         # 4.2 Detect persons
         detections = detect_persons(rgb_bgr)
 
+        max_dist_mm = -1
         # 4.3 For each person, find median distance from depth map
         for (x, y, w, h, score) in detections:
             dist_mm = estimate_distance(depth_mm, (x, y, w, h))
+
+            if (dist_mm > max_dist_mm):
+                max_dist_mm = dist_mm
+
             # Draw bounding box
             cv2.rectangle(rgb_bgr, (x, y), (x + w, y + h), (0,255,0), 2)
             # Draw distance label (in metres, one decimal)
@@ -211,7 +217,13 @@ def main():
             cv2.putText(rgb_bgr, label, (x, y - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
-        send_distance(int(escalar_2_0_5_a_0_700(dist_mm/1000)))
+        if max_dist_mm > 0:
+            print(int(escalar_2_0_5_a_0_700(max_dist_mm/1000)))
+            send_distance(int(escalar_2_0_5_a_0_700(max_dist_mm/1000)))
+        else:
+            comando = 'R\n'
+            ser.write(comando.encode('utf-8'))
+            send_distance(0)
         
         # 4.4 Visualize depth as 8-bit
         depth_vis = np.clip(depth_mm, 0, 4000).astype(np.float32)
