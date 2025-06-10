@@ -1,9 +1,11 @@
 #include <Servo.h>
 
 #define N_SERVOS 18       // Número total de servos
-#define FREQ1    0.0      // Desfase 1 en grados
-#define FREQ2    20.0     // Desfase 2 en grados
-#define FREQ3    40.0     // Desfase 3 en grados
+#define FREQB    0.0      // Desfase 1 en grados
+#define FREQY    20.0     // Desfase 2 en grados
+#define FREQG    40.0     // Desfase 3 en grados
+#define D        false   // Motor invertido o no
+#define I        true   // Motor invertido o no
 
 const int    STEPS         = 720;   // Estados discretos
 const float  FREQUENCY     = 0.2f;  // Hz
@@ -30,25 +32,24 @@ struct ServoConfig {
 // 1) Definición del array de configuraciones
 ServoConfig configs[N_SERVOS] = {
   // pin, phaseDeg, amplitude, inverted, center
-  {   9,   FREQ1,     90.0f,    false,    90.0f },   // Servo 0
-  {  10,   FREQ2,     90.0f,    false,    90.0f },   // Servo 1
-  {  11,   FREQ3,     90.0f,     true,    90.0f },   // Servo 2
-  // Rellenar el resto de servos (3..17) según tus necesidades:
-  {  22,    0.0f,     80.0f,    false,    90.0f },   // Servo 3
-  {  23,  120.0f,     80.0f,    false,    90.0f },   // Servo 4
-  {  24,  240.0f,     80.0f,    false,    90.0f },   // Servo 5
-  {  25,   30.0f,     60.0f,    false,    85.0f },   // Servo 6
-  {  26,  150.0f,     60.0f,    true,     85.0f },   // Servo 7 (invertido)
-  {  27,  270.0f,     60.0f,    false,    85.0f },   // Servo 8
-  {  28,   45.0f,     50.0f,    false,    80.0f },   // Servo 9
-  {  29,  165.0f,     50.0f,    false,    80.0f },   // Servo 10
-  {  30,  285.0f,     50.0f,    true,     80.0f },   // Servo 11
-  {  31,   60.0f,     30.0f,    false,    95.0f },   // Servo 12
-  {  32,  180.0f,     30.0f,    false,    95.0f },   // Servo 13
-  {  33,  300.0f,     30.0f,    false,    95.0f },   // Servo 14
-  {  34,   10.0f,     70.0f,    false,    88.0f },   // Servo 15
-  {  35,  130.0f,     70.0f,    true,     88.0f },   // Servo 16 (invertido)
-  {  36,  250.0f,     70.0f,    false,    88.0f }    // Servo 17
+  {  12,   FREQY,     20.0f,    D,    90.0f },   // Servo 15
+  {  11,   FREQB,     20.0f,    I,    90.0f },   // Servo 16
+  {  10,   FREQG,     20.0f,    D,    90.0f },   // Servo 17
+  {   8,   FREQB,     20.0f,    I,    90.0f },   // Servo 14
+  {   7,   FREQY,     20.0f,    I,    90.0f },   // Servo 18
+  {   6,   FREQB,     20.0f,    I,    90.0f },   // Servo 13
+  {  53,   FREQB,     20.0f,    I,    90.0f },   // Servo 6
+  {  51,   FREQG,     20.0f,    I,    90.0f },   // Servo 9
+  {   3,   FREQB,     20.0f,    I,    90.0f },   // Servo 11
+  {  45,   FREQB,     20.0f,    D,    90.0f },   // Servo 1
+  {  43,   FREQG,     20.0f,    D,    90.0f },   // Servo 12
+  {  41,   FREQY,     20.0f,    I,    90.0f },   // Servo 10
+  {  39,   FREQY,     20.0f,    I,    90.0f },   // Servo 8
+  {  35,   FREQB,     20.0f,    I,    90.0f },   // Servo 7
+  {  33,   FREQG,     20.0f,    I,    90.0f },   // Servo 3
+  {  31,   FREQY,     20.0f,    D,    90.0f },   // Servo 5
+  {  25,   FREQB,     20.0f,    D,    90.0f },   // Servo 4
+  {  27,   FREQY,     20.0f,    I,    90.0f }    // Servo 2
 };
 
 // 2) Array paralelo de objetos Servo
