@@ -30,6 +30,7 @@ def main():
 
             # 2) Z N, con N = STEP_N, 2*STEP_N, … hasta MAX_N
             for n in range(STEP_N, MAX_N + 1, STEP_N):
+                ser.write(b'R\n')
                 ser.write(f"Z {n}\n".encode("utf-8"))
                 time.sleep(INTERVAL)
 
