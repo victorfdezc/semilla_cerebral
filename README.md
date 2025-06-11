@@ -13,6 +13,7 @@ sudo apt install libc6-dev
 sudo apt install libgl1-mesa-dev
 sudo apt-get install make
 sudo apt-get install cmake 
+sudo apt-get install python3-opencv 
 pip install "numpy<1.24"
 pip install --upgrade cython
 
