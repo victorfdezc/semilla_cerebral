@@ -34,3 +34,7 @@ export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 sudo cp libfreenect/platform/linux/udev/51-kinect.rules /etc/udev/rules.d
 ```
+
+# Scripts
+## Demo Inauguracion
+No tiene camara, los movimientos van de suave a más caoticos y luego para y vuelve a ser suave.

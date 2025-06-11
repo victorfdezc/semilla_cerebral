@@ -134,7 +134,7 @@ def send_distance(distance, port="/dev/ttyACM0", baudrate=9600, timeout=1):
         serial.SerialException: If the port cannot be opened.
     """
     # Format the command, ending with a newline
-    cmd = f"Z {distance}\n"
+    cmd = f"Y {distance}\n"
     try:
         with serial.Serial(port, baudrate, timeout=timeout) as ser:
             ser.write(cmd.encode("utf-8"))
@@ -161,13 +161,26 @@ def send_cmd(cmd, port="/dev/ttyACM0", baudrate=9600, timeout=1):
     except serial.SerialException as e:
         print(f"Error: could not open {port}: {e}")
 
-def escalar_2_0_5_a_0_700(x):
+def scale_values(x):
     """
-    Escala x ∈ [2, 0.5] al rango [0, 700], de modo que:
-      - x=2   → y=0
-      - x=0.5 → y=700
+    Escala x ∈ [0.75, 1.5] al rango [7, 0], de modo que:
+      - x = 0.75 → y = 7
+      - x = 1.5  → y = 0
+    Valores fuera de [0.75, 1.5] producirán 'y' fuera de [0, 7], 
+    pero luego se recortan (clip) a ese rango [0, 7].
+    
+    Parámetros
+    ----------
+    x : float o array_like
+        Distancia en metros.
+    
+    Devuelve
+    -------
+    y : float o ndarray
+        Valor escalado en [0, 7].
     """
-    return np.clip((x - 4.5) * (90 / (1 - 2)),0,90)
+    y = (1.5 - x) * (7.0 / (1.5 - 0.75))
+    return np.clip(y, 0, 7)
 
 # ──────── 4. MAIN LOOP ────────
 
@@ -203,13 +216,13 @@ def main():
         # 4.2 Detect persons
         detections = detect_persons(rgb_bgr)
 
-        max_dist_mm = -1
+        min_distance_mm = 100000000000000
         # 4.3 For each person, find median distance from depth map
         for (x, y, w, h, score) in detections:
             dist_mm = estimate_distance(depth_mm, (x, y, w, h))
 
-            if (dist_mm > max_dist_mm):
-                max_dist_mm = dist_mm
+            if (dist_mm < min_distance_mm):
+                min_distance_mm = dist_mm
 
             # Draw bounding box
             cv2.rectangle(rgb_bgr, (x, y), (x + w, y + h), (0,255,0), 2)
@@ -218,11 +231,11 @@ def main():
             cv2.putText(rgb_bgr, label, (x, y - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
-        print(f"Max distance: \r\n", max_dist_mm)
-
-        if max_dist_mm > 0:
-            print(int(escalar_2_0_5_a_0_700(max_dist_mm/1000)))
-            send_distance(int(escalar_2_0_5_a_0_700(max_dist_mm/1000)))
+        print(f"Min distance: \r\n", min_dist_mm)
+        
+        if min_distance_mm < 100000000000000:
+            print(int(scale_values(min_distance_mm/1000)))
+            send_distance(int(scale_values(min_distance_mm/1000)))
         else:
             comando = 'R\n'
             ser.write(comando.encode('utf-8'))

@@ -32,7 +32,7 @@ struct ServoConfig {
 // 1) Definición del array de configuraciones
 ServoConfig configs[N_SERVOS] = {
   // pin, phaseDeg, amplitude, inverted, center
-  {  12,   FREQY,     20.0f,    D,    90.0f },   // Servo 15
+  {  12,   FREQY,     30.0f,    D,    90.0f },   // Servo 15
   {  11,   FREQB,     20.0f,    I,    90.0f },   // Servo 16
   {  10,   FREQG,     20.0f,    D,    90.0f },   // Servo 17
   {   8,   FREQB,     20.0f,    I,    90.0f },   // Servo 14
