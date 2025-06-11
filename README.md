@@ -13,10 +13,10 @@ sudo apt install libc6-dev
 sudo apt install libgl1-mesa-dev
 sudo apt-get install make
 sudo apt-get install cmake 
-sudo apt-get install python3-opencv 
 pip install "numpy<1.24"
 pip install --upgrade cython
-
+pip install --upgrade opencv-python
+pip install pyserial
 
 git clone https://github.com/OpenKinect/libfreenect.git
 cd libfreenect
@@ -31,4 +31,6 @@ sudo make install
 # Si se instala en otro directorio añade al path (mirar los últimos prints del make install):
 export PYTHONPATH=/usr/local/lib/python3/dist-packages:$PYTHONPATH
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+sudo cp libfreenect/platform/linux/udev/51-kinect.rules /etc/udev/rules.d
 ```

@@ -2,11 +2,12 @@
 import freenect
 import cv2
 import numpy as np
+import os
 
 # ──────── 1. LOAD YOLOv5 ONNX MODEL ────────
 
 # Path to your ONNX file (adjust if you used a different name/location)
-YOLO_ONNX = "/home/victor/semilla_cerebral/yolov5/yolov5nu.onnx"
+YOLO_ONNX = os.path.join(os.path.expanduser("~"), "semilla_cerebral", "yolov5", "yolov5nu.onnx")
 
 # Load the network once using cv2.dnn
 net = cv2.dnn.readNetFromONNX(YOLO_ONNX)
@@ -216,6 +217,8 @@ def main():
             label = f"{dist_mm/1000:.1f} m"
             cv2.putText(rgb_bgr, label, (x, y - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+
+        print(f"Max distance: \r\n", max_dist_mm)
 
         if max_dist_mm > 0:
             print(int(escalar_2_0_5_a_0_700(max_dist_mm/1000)))
