@@ -2,11 +2,12 @@
 import freenect
 import cv2
 import numpy as np
+import os
 
 # ──────── 1. LOAD YOLOv5 ONNX MODEL ────────
 
 # Path to your ONNX file (adjust if you used a different name/location)
-YOLO_ONNX = "/home/victor/semilla_cerebral/yolov5/yolov5nu.onnx"
+YOLO_ONNX = os.path.join(os.path.expanduser("~"), "semilla_cerebral", "yolov5", "yolov5nu.onnx")
 
 # Load the network once using cv2.dnn
 net = cv2.dnn.readNetFromONNX(YOLO_ONNX)
@@ -162,10 +163,10 @@ def send_cmd(cmd, port="/dev/ttyACM0", baudrate=9600, timeout=1):
 
 def scale_values(x):
     """
-    Escala x ∈ [0.75, 3] al rango [7, 0], de modo que:
+    Escala x ∈ [0.75, 1.5] al rango [7, 0], de modo que:
       - x = 0.75 → y = 7
       - x = 1.5  → y = 0
-    Valores fuera de [0.75, 3] producirán y fuera de [0, 7], 
+    Valores fuera de [0.75, 1.5] producirán 'y' fuera de [0, 7], 
     pero luego se recortan (clip) a ese rango [0, 7].
     
     Parámetros
@@ -230,6 +231,8 @@ def main():
             cv2.putText(rgb_bgr, label, (x, y - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
+        print(f"Min distance: \r\n", min_dist_mm)
+        
         if min_distance_mm < 100000000000000:
             print(int(scale_values(min_distance_mm/1000)))
             send_distance(int(scale_values(min_distance_mm/1000)))
