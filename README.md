@@ -36,5 +36,7 @@ sudo cp libfreenect/platform/linux/udev/51-kinect.rules /etc/udev/rules.d
 ```
 
 # Scripts
+## Detect Person Kinect YOLO
+Este es el main script de la obra, es el que se ejecuta para que la camara envíe comandos a la pieza para que los servomotores se muevan de forma diferente.
 ## Demo Inauguracion
 No tiene camara, los movimientos van de suave a más caoticos y luego para y vuelve a ser suave.

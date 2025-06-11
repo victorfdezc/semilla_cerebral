@@ -231,7 +231,7 @@ def main():
             cv2.putText(rgb_bgr, label, (x, y - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
-        print(f"Min distance: \r\n", min_dist_mm)
+        print(f"Min distance: \r\n", min_distance_mm)
         
         if min_distance_mm < 100000000000000:
             print(int(scale_values(min_distance_mm/1000)))
