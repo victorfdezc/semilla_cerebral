@@ -13,9 +13,9 @@ sudo apt install libc6-dev
 sudo apt install libgl1-mesa-dev
 sudo apt-get install make
 sudo apt-get install cmake 
-pip install "numpy<1.24"
+pip install numpy==1.24.4
 pip install --upgrade cython
-pip install --upgrade opencv-python
+pip install opencv-python
 pip install pyserial
 
 git clone https://github.com/OpenKinect/libfreenect.git
