@@ -234,7 +234,7 @@ def main():
         # print(f"Min distance: \r\n", min_distance_mm)
         
         if min_distance_mm < 100000000000000:
-            print(int(scale_values(min_distance_mm/1000)))
+            # print(int(scale_values(min_distance_mm/1000)))
             send_distance(int(scale_values(min_distance_mm/1000)))
         else:
             comando = 'R\n'
